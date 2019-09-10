@@ -114,7 +114,7 @@ public class ChatServer {
             if (key.isValid() && key.channel() instanceof SocketChannel){
                 if (!key.channel().equals(client)){
                     wBuffer.clear();
-                    wBuffer.put(charset.encode(request));
+                    wBuffer.put(charset.encode(((SocketChannel) key.channel()).socket().getPort() + ": " + request));
                     wBuffer.flip();
                     while (wBuffer.hasRemaining()){
                         ((SocketChannel) key.channel()).write(wBuffer);

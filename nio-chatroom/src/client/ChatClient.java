@@ -58,7 +58,7 @@ public class ChatClient {
             e.printStackTrace();
         }catch (ClosedSelectorException e){
             //用户正常退出
-            System.out.println(clientName + "退出");
+            System.out.println(clientName + " - 下线");
         }finally {
             try {
                 close(selector);
@@ -96,7 +96,7 @@ public class ChatClient {
             return;
         }
         wBuffer.clear();
-        wBuffer.put(charset.encode(name + ": " + msg));
+        wBuffer.put(charset.encode(msg));
         wBuffer.flip();
         while (wBuffer.hasRemaining()){
             client.write(wBuffer);
