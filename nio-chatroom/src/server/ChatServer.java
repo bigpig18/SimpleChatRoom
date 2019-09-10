@@ -1,5 +1,7 @@
 package server;
 
+import constant.ChatConstant;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,19 +18,15 @@ import java.util.Set;
  * @date 2019/9/9
  */
 public class ChatServer {
-    private static final int DEFAULT_PORT = 8081;
-    private static final String EXIT = "EXIT";
-    private static final int BUFFER_SIZE = 1024;
-
     private ServerSocketChannel server = null;
     private Selector selector = null;
     private Charset charset = Charset.forName("UTF-8");
-    private ByteBuffer rBuffer = ByteBuffer.allocate(BUFFER_SIZE);
-    private ByteBuffer wBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+    private ByteBuffer rBuffer = ByteBuffer.allocate(ChatConstant.BUFFER_SIZE);
+    private ByteBuffer wBuffer = ByteBuffer.allocate(ChatConstant.BUFFER_SIZE);
     private int port;
 
     private ChatServer(){
-        this(DEFAULT_PORT);
+        this(ChatConstant.DEFAULT_PORT);
     }
 
     /**
@@ -44,7 +42,7 @@ public class ChatServer {
         chatServer.start();
     }
 
-    public void start(){
+    private void start(){
         try {
             selector = Selector.open();
 
@@ -76,10 +74,11 @@ public class ChatServer {
     }
 
     private void handles(SelectionKey key) throws IOException {
-        //获取已就绪channel
-        SocketChannel client = (SocketChannel) key.channel();
         // ACCEPT事件 - 与客户端建立连接
         if (key.isAcceptable()){
+            //获取已就绪channel
+            ServerSocketChannel server = (ServerSocketChannel) key.channel();
+            SocketChannel client = server.accept();
             client.configureBlocking(false);
             //将channel注册为可读事件
             client.register(selector,SelectionKey.OP_READ);
@@ -90,6 +89,7 @@ public class ChatServer {
         }
         // READ事件 - 客户端发送了消息给服务端
         else if (key.isReadable()){
+            SocketChannel client = (SocketChannel) key.channel();
             String request = receive(client);
             if (request.isEmpty()){
                 //客户端异常
@@ -126,13 +126,13 @@ public class ChatServer {
 
     private String receive(SocketChannel client) throws IOException {
         rBuffer.clear();
-        while(client.read(rBuffer) > 0){};
+        while(client.read(rBuffer) > 0);
         rBuffer.flip();
         return String.valueOf(charset.decode(rBuffer));
     }
 
     private boolean readyToExit(String msg){
-        return msg.equals(EXIT);
+        return msg.equals(ChatConstant.EXIT);
     }
 
     private void close(Closeable... closeable){
