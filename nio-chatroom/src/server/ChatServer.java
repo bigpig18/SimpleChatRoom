@@ -27,16 +27,20 @@ public class ChatServer {
     private ByteBuffer wBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private int port;
 
-    public ChatServer(){
+    private ChatServer(){
         this(DEFAULT_PORT);
     }
 
+    /**
+     * 可自定义端口
+     * @param port 端口号
+     */
     private ChatServer(int port){
         this.port = port;
     }
 
     public static void main(String[] args) {
-        ChatServer chatServer = new ChatServer(DEFAULT_PORT);
+        ChatServer chatServer = new ChatServer();
         chatServer.start();
     }
 
