@@ -25,9 +25,6 @@ public class UserInputHandler implements Runnable {
 
             try {
                 chatClient.send(msg,name);
-                if (chatClient.readyToExit(msg)){
-                    break;
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
