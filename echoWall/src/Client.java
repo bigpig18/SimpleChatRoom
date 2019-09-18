@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -44,7 +43,7 @@ public class Client {
                 buffer.flip();
                 Future<Integer> readResult = clientChannel.read(buffer);
                 readResult.get();
-                String echo = Arrays.toString(buffer.array());
+                String echo = new String(buffer.array());
                 buffer.clear();
                 System.out.println(echo);
             }
