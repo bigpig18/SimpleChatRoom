@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author li
@@ -46,7 +45,8 @@ public class ChatServer {
             while (true){
                 //等待客户端连接
                 Socket socket = serverSocket.accept();
-                //TODO 创建ChatHandler(new Thread(new ChatHandler(this,socket)).start();)
+                //ChatHandler(new Thread(new ChatHandler(this,socket)).start();)
+                //伪异步IO(就是加个线程池)
                 executorService.execute(new ChatHandler(this,socket));
             }
         } catch (IOException e) {
