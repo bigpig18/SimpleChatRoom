@@ -53,7 +53,7 @@ public class ChatServer {
             serverSocketChannel = AsynchronousServerSocketChannel.open(channelGroup);
             //绑定监听的主机地址以及端口号
             serverSocketChannel.bind(new InetSocketAddress(AioConstant.LOCALHOST,AioConstant.DEFAULT_PORT));
-            System.out.printf("服务器已启动，监听[%s]端口",AioConstant.DEFAULT_PORT);
+            System.out.printf("服务器已启动，监听[%s]端口\n",AioConstant.DEFAULT_PORT);
             //持续监听端口
             while (true){
                 //当监听到accept事件时，会异步调用 AcceptHandler
